@@ -1,0 +1,17 @@
+{
+  "name": "parser_bnp",
+  "version": "0.0.1",
+  "description": "CSV - JSON - XLSX converter, for Ironhack Team.",
+  "main": "ani.js",
+  "dependencies": {
+    "convert-csv-to-json": "^0.0.13",
+    "csvtojson": "^2.0.8",
+    "json2xls": "^0.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Manuel Rodriguez Padilla (VictorIrix)",
+  "license": "ISC"
+}
