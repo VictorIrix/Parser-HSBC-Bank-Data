@@ -1,35 +1,51 @@
-let csvToJson = require('convert-csv-to-json');
-let data = csvToJson.getJsonFromCsv("19.1.24.csv");
+console.log("Bienvenida Ana Contreras. Estoy a su entera disposición para ejecutar la conversión")
 
+const csvToJson = require('convert-csv-to-json');
 const json2xls = require('json2xls');
 const fs = require('fs');
 
-function myTrim(x) {
-  return x.replace(/^\s+|\s+$/gm,'');
-}
+let prompt = require('prompt');
 
-function cleaner(str) {
-  console.log(str)
-  return myTrim(str);
-}
+prompt.start();
+ 
+prompt.get(['csv', 'xlsx'], function (err, result) {
+ 
+  console.log('Los nombres de archivo son los siguientes:');
+  console.log('  CSV: ' + result.csv);
+  console.log('  XLSX ' + result.xlsx);
 
-let dataNew = []
+  //let data = csvToJson.getJsonFromCsv("EneroFR.csv");
+  let data = csvToJson.getJsonFromCsv(`${result.csv}`);
 
-for (i = 0; i < data.length; i++) {
-  if (data[i]["CodeEnregistrement"] === "04") {
-    dataNew.push({
-      "Dia": data[i]["Dated\'op�ration"],
-      "Concepto": cleaner(data[i]["Libell�"]),
-      "Amount": data[i]["Montant"]
-    })
+  function myTrim(x) {
+    return x.replace(/^\s+|\s+$/gm,'');
   }
-  if (data[i]["CodeEnregistrement"] === "05") {
-    dataNew[dataNew.length - 1]["Concepto"] = dataNew[dataNew.length - 1]["Concepto"] + " " + cleaner(data[i]["Libell�"])
+  
+  function cleaner(str) {
+    console.log(str)
+    return myTrim(str);
   }
-}
+  
+  let dataNew = []
+  
+  for (i = 0; i < data.length; i++) {
+    if (data[i]["CodeEnregistrement"] === "04") {
+      dataNew.push({
+        "Dia": data[i]["Dated\'op�ration"],
+        "Concepto": cleaner(data[i]["Libell�"]),
+        "Amount": data[i]["Montant"]
+      })
+    }
+    if (data[i]["CodeEnregistrement"] === "05") {
+      dataNew[dataNew.length - 1]["Concepto"] = dataNew[dataNew.length - 1]["Concepto"] + " " + cleaner(data[i]["Libell�"])
+    }
+  }
+  
+  //.replace(/ /g,'')
+  //console.log(dataNew)
+  
+  var xls = json2xls(dataNew);
+  //fs.writeFileSync('Enero.xlsx', xls, 'binary');
+  fs.writeFileSync(`${result.xlsx}`, xls, 'binary');
 
-//.replace(/ /g,'')
-//console.log(dataNew)
-
-var xls = json2xls(dataNew);
-fs.writeFileSync('dataTest.xlsx', xls, 'binary');
+  });
